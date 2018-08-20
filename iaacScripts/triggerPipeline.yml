@@ -1,0 +1,8 @@
+- name: Make a dummy commit to run the build & release pipeline
+---
+- hosts: all 
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Get updated files from git repository
+      command: git clone https://github.standard.com/BRE-Samples-Dev/${Application}.git && cd ${Application} && echo "DummyCommit" >> README.md && git add --all && git commit -m "Dummy Commit" && git push

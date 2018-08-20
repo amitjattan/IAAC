@@ -1,0 +1,9 @@
+---
+## This playbook deploys a simple standalone JBoss server.
+
+- hosts: all
+  sudo : True
+  remote_user: centos
+
+  roles:
+    - {{ roleName }}

@@ -1,0 +1,49 @@
+{
+  "variables": {
+     "aws_access_key": "",
+     "aws_secret_key": "",
+     "ami_name": "",
+     "package": ""
+  },
+
+  "builders": [{
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "type": "amazon-ebs",
+    "region": "us-west-2",
+    "availability_zone": "us-west-2a",
+    "source_ami": "ami-a042f4d8",
+    "instance_type": "t2.medium",
+    "ssh_username": "centos",
+    "ssh_proxy_host": "proxy.standard.com",
+    "communicator": "ssh",
+    "ami_name": "image.{{user `ami_name` | clean_ami_name}}"
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "inline": [
+        "sudo yum install -y ansible wget"
+    ]
+  },
+                   
+ {
+    "type": "file",
+    "source": "./{{user `package`}}",
+    "destination": "/tmp/"
+  }, 
+  
+  {
+    "type": "ansible-local",
+    "playbook_file": "./iaacScripts/ansiblePlaybooks/site.yml",
+    "playbook_dir": "./iaacScripts/ansiblePlaybooks",
+    "extra_arguments": [
+     "--extra-vars \"roleName={{user `role`}}\""
+    ]
+  }],
+
+"post-processors": [ {
+    "type": "manifest",
+    "output": "manifest.json",
+    "strip_path": true
+  }]
+}

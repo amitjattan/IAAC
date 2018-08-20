@@ -1,0 +1,11 @@
+[Unit]
+Description=Jboss Standalone Server
+After=syslog.target network.target
+
+[Service]
+Type=forking
+ExecStart=/opt/jboss/bin/init.d/jboss-eap-rhel.sh start
+ExecStop=/opt/jboss/bin/init.d/jboss-eap-rhel.sh stop
+
+[Install]
+WantedBy=multi-user.target
